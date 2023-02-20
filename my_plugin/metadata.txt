@@ -1,0 +1,24 @@
+[general]
+name=Hello QGIS Plugin
+qgisMinimumVersion=3.0
+description=XXXXXXXXXXXXXXXXXXXX
+version=0.0.0
+author=MIERUNE Inc.
+email=info@mierune.co.jp
+
+about=Hello QGIS
+
+tracker=https://github.com/MIERUNE/xxxxx/issues
+repository=https://github.com/MIERUNE/xxxxx
+
+
+hasProcessingProvider=no
+changelog=
+tags=python
+
+homepage=
+category=Plugins
+icon=icon.png
+experimental=False
+deprecated=False
+server=False
