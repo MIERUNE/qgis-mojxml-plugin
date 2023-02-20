@@ -12,7 +12,8 @@ class Provider(QgsProcessingProvider):
         return "mojxmlloader"
 
     def name(self, *args, **kwargs):
-        return self.tr("MoJXML loader")
+        return self.tr("法務省登記所備付地図データ")
 
     def icon(self):
+        # FIXME
         return QIcon()

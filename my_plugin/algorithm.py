@@ -1,9 +1,9 @@
 from pathlib import Path
 
-from PyQt5.QtCore import QCoreApplication
 from qgis.core import (
     QgsCoordinateReferenceSystem,
     QgsFeature,
+    QgsField,
     QgsFields,
     QgsLineString,
     QgsMultiPolygon,
@@ -19,6 +19,7 @@ from qgis.core import (
 from .mojxml.parse import ParseOptions
 from .mojxml.process import files_to_feature_iter
 from .mojxml.process.executor import ThreadPoolExecutor
+from .mojxml.schema import OGR_SCHEMA
 
 
 class MojXMLProcessingAlrogithm(QgsProcessingAlgorithm):
@@ -35,8 +36,8 @@ class MojXMLProcessingAlrogithm(QgsProcessingAlgorithm):
         self.addParameter(
             QgsProcessingParameterFile(
                 self.INPUT,
-                self.tr("入力ファイル"),
-                fileFilter="法務省地図XML (*.xml *.zip)",
+                self.tr("地図XML/ZIPファイル"),
+                fileFilter="地図XML (*.xml *.zip)",
             )
         )
         self.addParameter(
@@ -54,23 +55,25 @@ class MojXMLProcessingAlrogithm(QgsProcessingAlgorithm):
         return "mojxmlloader"
 
     def displayName(self):
-        return self.tr("MoJXML Loader")
+        return self.tr("地図XML/ZIPを読み込む")
 
     def group(self):
-        return self.tr("Import")
+        return None
 
     def groupId(self):
-        return "import"
+        return None
 
     def processAlgorithm(self, parameters, context, feedback):
         filename = self.parameterAsFile(parameters, self.INPUT, context)
-
         if filename is None:
             raise QgsProcessingException(
                 self.invalidSourceError(parameters, self.INPUT)
             )
 
         fields = QgsFields()
+        for name, type in OGR_SCHEMA["properties"].items():
+            fields.append(QgsField(name, typeName=type))
+
         (sink, name) = self.parameterAsSink(
             parameters,
             self.OUTPUT,
@@ -97,10 +100,14 @@ class MojXMLProcessingAlrogithm(QgsProcessingAlgorithm):
             geom.addGeometry(QgsPolygon(QgsLineString(exterior)))
             feat = QgsFeature()
             feat.setGeometry(geom)
+            feat.setFields(fields, initAttributes=True)
+            for name, value in src_feat["properties"].items():
+                feat.setAttribute(name, value)
+
             sink.addFeature(feat)
 
             count += 1
-            if count > 0 and count % 100 == 0:
+            if count % 100 == 0:
                 feedback.pushInfo(f"{count} features processed")
 
         return {"STATUS": "SUCCESS"}
