@@ -12,7 +12,7 @@ tracker=https://github.com/MIERUNE/xxxxx/issues
 repository=https://github.com/MIERUNE/xxxxx
 
 
-hasProcessingProvider=no
+hasProcessingProvider=yes
 changelog=
 tags=python
 

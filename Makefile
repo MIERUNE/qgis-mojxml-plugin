@@ -22,3 +22,10 @@ deploy:  ## QGIS にデプロイ
 
 package:  ## パッケージ (zip) を生成
 	git archive -o dist/plugin-${VERSION}.zip ${VERSION} ${PLUGIN_NAME}
+
+update-deps:  ## 依存ライブラリを更新
+	pip download mojxml --no-dependencies 
+	wheel3 unpack mojxml-*-py3-none-any.whl
+	mv mojxml-*/mojxml my_plugin/mojxml
+	rm -rf mojxml-*/
+	rm -rf mojxml-*.whl
