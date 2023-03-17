@@ -11,6 +11,7 @@ from qgis.core import (
     QgsProcessing,
     QgsProcessingAlgorithm,
     QgsProcessingException,
+    QgsProcessingParameterBoolean,
     QgsProcessingParameterFeatureSink,
     QgsProcessingParameterFile,
     QgsWkbTypes,
@@ -25,6 +26,8 @@ from .mojxml.schema import OGR_SCHEMA
 class MojXMLProcessingAlrogithm(QgsProcessingAlgorithm):
     INPUT = "INPUT"
     OUTPUT = "OUTPUT"
+    CHIKUGAI = "CHIKUGAI"
+    ARBITRARY = "ARBITRARY"
 
     def __init__(self):
         super().__init__()
@@ -45,6 +48,18 @@ class MojXMLProcessingAlrogithm(QgsProcessingAlgorithm):
                 self.OUTPUT,
                 self.tr("出力ファイル"),
                 QgsProcessing.TypeVectorPolygon,
+            )
+        )
+        self.addParameter(
+            QgsProcessingParameterBoolean(
+                self.ARBITRARY,
+                self.tr("任意座標系のデータを含める"),
+            )
+        )
+        self.addParameter(
+            QgsProcessingParameterBoolean(
+                self.CHIKUGAI,
+                self.tr("地区外・別図を含める"),
             )
         )
 
@@ -74,6 +89,9 @@ class MojXMLProcessingAlrogithm(QgsProcessingAlgorithm):
         for name, type in OGR_SCHEMA["properties"].items():
             fields.append(QgsField(name, typeName=type))
 
+        include_chikugai = self.parameterAsBoolean(parameters, self.CHIKUGAI, context)
+        include_arbitrary = self.parameterAsBoolean(parameters, self.ARBITRARY, context)
+
         (sink, name) = self.parameterAsSink(
             parameters,
             self.OUTPUT,
@@ -83,31 +101,42 @@ class MojXMLProcessingAlrogithm(QgsProcessingAlgorithm):
             QgsCoordinateReferenceSystem(4326),
         )
 
-        po = ParseOptions()
+        po = ParseOptions(
+            include_arbitrary_crs=include_arbitrary,
+            include_chikugai=include_chikugai,
+        )
         executor = ThreadPoolExecutor(po)
         count = 0
-        for src_feat in files_to_feature_iter(
-            [Path(filename) for filename in [filename]], executor
-        ):
-            if feedback.isCanceled():
-                return {"STATUS": "CANCELLED"}
+        feedback.pushInfo("地物を読み込んでいます...")
+        try:
+            for src_feat in files_to_feature_iter(
+                [Path(filename) for filename in [filename]], executor
+            ):
+                if feedback.isCanceled():
+                    return {"STATUS": "CANCELLED"}
 
-            json_geom = src_feat["geometry"]
-            json_coords = json_geom["coordinates"]
-            exterior = json_coords[0][0]
+                json_geom = src_feat["geometry"]
+                json_coords = json_geom["coordinates"]
+                exterior = json_coords[0][0]
 
-            geom = QgsMultiPolygon()
-            geom.addGeometry(QgsPolygon(QgsLineString(exterior)))
-            feat = QgsFeature()
-            feat.setGeometry(geom)
-            feat.setFields(fields, initAttributes=True)
-            for name, value in src_feat["properties"].items():
-                feat.setAttribute(name, value)
+                geom = QgsMultiPolygon()
+                geom.addGeometry(QgsPolygon(QgsLineString(exterior)))
+                feat = QgsFeature()
+                feat.setGeometry(geom)
+                feat.setFields(fields, initAttributes=True)
+                for name, value in src_feat["properties"].items():
+                    feat.setAttribute(name, value)
 
-            sink.addFeature(feat)
+                sink.addFeature(feat)
 
-            count += 1
-            if count % 100 == 0:
-                feedback.pushInfo(f"{count} features processed")
+                count += 1
+                if count % 100 == 0:
+                    feedback.pushInfo(f"{count} 個の地物を読み込みました。")
+        except ValueError:
+            feedback.reportError(
+                "ファイルの読み込みに失敗しました。正常なファイルかどうか確認してください。", fatalError=True
+            )
+            return
 
+        feedback.pushInfo(f"{count} 個の地物を読み込みました。")
         return {"STATUS": "SUCCESS"}
