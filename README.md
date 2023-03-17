@@ -1,1 +1,1 @@
-# qgis-mojxml-processing
+# qgis-mojxml-plugin

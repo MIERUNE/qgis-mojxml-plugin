@@ -1,10 +1,10 @@
 [tool.poetry]
-name = "qgis-plugin"
+name = "qgis-mojxml-plugin"
 version = "0.0.0"
 description = ""
 authors = ["MIERUNE Inc. <no-reply@mierune.co.jp>"]
 readme = "README.md"
-packages = [{ include = "my_plugin" }]
+packages = [{ include = "mojxml_plugin" }]
 
 [tool.poetry.dependencies]
 python = "^3.9"

@@ -1,4 +1,4 @@
-PLUGIN_NAME = my_plugin
+PLUGIN_NAME = mojxml_plugin
 
 # パッケージングする際の tag を環境変数で指定
 VERSION = HEAD
@@ -15,17 +15,17 @@ init:  ## 開発環境を初期化
 	poetry config --local virtualenvs.options.system-site-packages true
 	poetry env use $(QGIS_BIN)/python3
 	poetry install
-	pre-commit install
 
 deploy:  ## QGIS にデプロイ
 	rsync -av --delete ${PLUGIN_NAME} $(QGIS_USER)/python/plugins/
 
 package:  ## パッケージ (zip) を生成
+	mkdir -p dist
 	git archive -o dist/plugin-${VERSION}.zip ${VERSION} ${PLUGIN_NAME}
 
 update-deps:  ## 依存ライブラリを更新
 	pip download mojxml --no-dependencies
 	wheel3 unpack mojxml-*-py3-none-any.whl
-	rsync -r --delete mojxml-*/mojxml my_plugin/
+	rsync -r --delete mojxml-*/mojxml ${PLUGIN_NAME}/
 	rm -rf mojxml-*/
 	rm -rf mojxml-*.whl
