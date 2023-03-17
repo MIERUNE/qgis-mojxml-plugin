@@ -1,12 +1,14 @@
+from pathlib import Path
+
 from PyQt5.QtGui import QIcon
 from qgis.core import QgsProcessingProvider
 
-from .algorithm import MojXMLProcessingAlrogithm
+from .algorithm import MOJXMLProcessingAlrogithm
 
 
 class Provider(QgsProcessingProvider):
     def loadAlgorithms(self, *args, **kwargs):
-        self.addAlgorithm(MojXMLProcessingAlrogithm())
+        self.addAlgorithm(MOJXMLProcessingAlrogithm())
 
     def id(self, *args, **kwargs):
         return "mojxmlloader"
@@ -15,5 +17,5 @@ class Provider(QgsProcessingProvider):
         return self.tr("法務省登記所備付地図データ")
 
     def icon(self):
-        # FIXME
-        return QIcon()
+        path = (Path(__file__).parent / "icon.png").resolve()
+        return QIcon(str(path))

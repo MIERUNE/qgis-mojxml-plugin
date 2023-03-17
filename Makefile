@@ -21,7 +21,7 @@ deploy:  ## QGIS にデプロイ
 
 package:  ## パッケージ (zip) を生成
 	mkdir -p dist
-	git archive -o dist/plugin-${VERSION}.zip ${VERSION} ${PLUGIN_NAME}
+	git archive -o dist/${PLUGIN_NAME}-${VERSION}.zip ${VERSION} ${PLUGIN_NAME}
 
 update-deps:  ## 依存ライブラリを更新
 	pip download mojxml --no-dependencies

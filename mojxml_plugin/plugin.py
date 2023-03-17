@@ -6,8 +6,8 @@ from qgis.gui import QgisInterface
 from .provider import Provider
 
 
-class HelloPlugin:
-    """My very own plugin"""
+class MOJXMLPlugin:
+    """QGIS plugin for loading Japanese land registration XML files"""
 
     def __init__(self, iface: QgisInterface):
         self.iface = iface

@@ -1,5 +1,6 @@
 from pathlib import Path
 
+from qgis.core import QgsProcessingException  # pyright: ignore
 from qgis.core import (
     QgsCoordinateReferenceSystem,
     QgsFeature,
@@ -10,7 +11,6 @@ from qgis.core import (
     QgsPolygon,
     QgsProcessing,
     QgsProcessingAlgorithm,
-    QgsProcessingException,
     QgsProcessingParameterBoolean,
     QgsProcessingParameterFeatureSink,
     QgsProcessingParameterFile,
@@ -23,7 +23,7 @@ from .mojxml.process.executor import ThreadPoolExecutor
 from .mojxml.schema import OGR_SCHEMA
 
 
-class MojXMLProcessingAlrogithm(QgsProcessingAlgorithm):
+class MOJXMLProcessingAlrogithm(QgsProcessingAlgorithm):
     INPUT = "INPUT"
     OUTPUT = "OUTPUT"
     CHIKUGAI = "CHIKUGAI"
@@ -64,7 +64,7 @@ class MojXMLProcessingAlrogithm(QgsProcessingAlgorithm):
         )
 
     def createInstance(self):
-        return MojXMLProcessingAlrogithm()
+        return MOJXMLProcessingAlrogithm()
 
     def name(self):
         return "mojxmlloader"
