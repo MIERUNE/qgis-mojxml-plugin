@@ -1,12 +1,12 @@
 """xmlおよびzipファイルを透過的に扱う"""
 
 from pathlib import Path
-from typing import Iterable
+from typing import Iterable, List
 from zipfile import ZipFile
 
 
-def iter_content_xmls(src_paths: list[Path]) -> Iterable[bytes]:
-    """WIP"""
+def iter_content_xmls(src_paths: List[Path]) -> Iterable[bytes]:
+    """Iterate XML contents from given zips and xmls"""
     for src_path in src_paths:
         src_path = Path(src_path)
         if src_path.suffix == ".xml":
@@ -23,7 +23,7 @@ class MojXMLZipFile(ZipFile):
     """法務省登記所備付地図データの多段zip圧縮されたアーカイブを扱う"""
 
     def iter_xml_contents(self):
-        """TODO"""
+        """Iterate XML contents from given zips"""
         for name in self.namelist():
             if name.endswith(".zip"):
                 yield self._extract_xml_content(name[:-4])
@@ -31,7 +31,6 @@ class MojXMLZipFile(ZipFile):
                 yield self.open(name).read()
 
     def _extract_xml_content(self, internal_name: str) -> bytes:
-        """TODO"""
         with self.open(internal_name + ".zip") as f:
             with ZipFile(f) as zf:
                 xml_content = zf.open(internal_name + ".xml").read()

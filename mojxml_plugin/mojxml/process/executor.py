@@ -3,7 +3,7 @@
 import concurrent.futures
 import os
 from abc import ABCMeta, abstractmethod
-from typing import Iterable
+from typing import Dict, Iterable, List, Type
 
 from ..parse import Feature, ParseOptions, parse_raw
 
@@ -12,33 +12,31 @@ class BaseExecutor(metaclass=ABCMeta):
     """Executor for processing files"""
 
     def __init__(self, options: ParseOptions):
-        """TODO"""
+        """Initialize"""
         self.options = options
 
     @abstractmethod
     def iter_process(
         self,
         src_iter: Iterable[bytes],
-    ) -> Iterable[list[Feature]]:
-        """TODO"""
-        ...
+    ) -> Iterable[List[Feature]]:
+        """Convert XMLs to OGR features"""
 
 
 class WorkerPoolExecutor(BaseExecutor, metaclass=ABCMeta):
-    """TODO"""
+    """Executor implemeted with worker pool"""
 
     @abstractmethod
-    def get_executor(self, max_workers: int) -> concurrent.futures.Executor:
-        """TODO"""
+    def _get_executor(self, max_workers: int) -> concurrent.futures.Executor:
         ...
 
     def iter_process(
         self,
         src_iter: Iterable[bytes],
-    ) -> Iterable[list[Feature]]:
-        """TODO"""
+    ) -> Iterable[List[Feature]]:
+        """Convert XMLs to OGR features"""
         max_workers = os.cpu_count() or 1
-        with self.get_executor(max_workers=max_workers) as executor:
+        with self._get_executor(max_workers=max_workers) as executor:
             futs = []
             for src in src_iter:
                 fut = executor.submit(parse_raw, src, self.options)
@@ -62,8 +60,7 @@ class WorkerPoolExecutor(BaseExecutor, metaclass=ABCMeta):
 class ProcessPoolExecutor(WorkerPoolExecutor):
     """Process paralelly with ProcessPoolExecutor"""
 
-    def get_executor(self, max_workers: int) -> concurrent.futures.Executor:
-        """TODO"""
+    def _get_executor(self, max_workers: int) -> concurrent.futures.Executor:
         max_workers = os.cpu_count() or 1
         return concurrent.futures.ProcessPoolExecutor(max_workers=max_workers)
 
@@ -71,25 +68,21 @@ class ProcessPoolExecutor(WorkerPoolExecutor):
 class ThreadPoolExecutor(WorkerPoolExecutor):
     """Process paralelly with ThreadPoolExecutor"""
 
-    def get_executor(self, max_workers: int) -> concurrent.futures.Executor:
-        """TODO"""
+    def _get_executor(self, max_workers: int) -> concurrent.futures.Executor:
         max_workers = (os.cpu_count() or 1) * 2
         return concurrent.futures.ThreadPoolExecutor(max_workers=max_workers)
 
 
 class SingleThreadExecutor(BaseExecutor):
-    """Process files with normal iterator"""
+    """Process files with single-thread (normal) iterator"""
 
-    def iter_process(
-        self,
-        src_iter: Iterable[bytes],
-    ) -> Iterable[list[Feature]]:
-        """TODO"""
+    def iter_process(self, src_iter: Iterable[bytes]) -> Iterable[List[Feature]]:
+        """Convert XMLs to OGR features"""
         for src in src_iter:
             yield parse_raw(src, options=self.options)
 
 
-EXECUTOR_MAP: dict[str, type[BaseExecutor]] = {
+EXECUTOR_MAP: Dict[str, Type[BaseExecutor]] = {
     "multiprocess": ProcessPoolExecutor,
     "thread": ThreadPoolExecutor,
     "single": SingleThreadExecutor,
