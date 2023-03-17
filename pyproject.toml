@@ -1,8 +1,8 @@
 [tool.poetry]
 name = "qgis-mojxml-plugin"
 version = "0.0.0"
-description = ""
-authors = ["MIERUNE Inc. <no-reply@mierune.co.jp>"]
+description = "QGISで法務省登記所備付地図データ（地図XML）の読み込みや変換を行うプラグイン"
+authors = ["MIERUNE Inc. <info@mierune.co.jp>"]
 readme = "README.md"
 packages = [{ include = "mojxml_plugin" }]
 

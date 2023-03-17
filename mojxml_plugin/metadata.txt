@@ -1,22 +1,21 @@
 [general]
-name=Hello QGIS Plugin
+name=MOJXML Loader
 qgisMinimumVersion=3.0
-description=XXXXXXXXXXXXXXXXXXXX
+description=法務省登記所備付地図データ（地図XML）の読み込みや変換を行います。
 version=0.0.0
 author=MIERUNE Inc.
 email=info@mierune.co.jp
 
-about=Hello QGIS
+about=xxxxxxxxxxxxxxxxxxxx
 
-tracker=https://github.com/MIERUNE/xxxxx/issues
-repository=https://github.com/MIERUNE/xxxxx
-
+tracker=https://github.com/MIERUNE/qgis-mojxml-plugin/issues
+repository=https://github.com/MIERUNE/qgis-mojxml-plugin
 
 hasProcessingProvider=yes
 changelog=
 tags=python
 
-homepage=
+homepage=https://github.com/MIERUNE/qgis-mojxml-plugin
 category=Plugins
 icon=icon.png
 experimental=False
