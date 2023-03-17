@@ -11,7 +11,7 @@ python = "^3.9"
 
 
 [tool.poetry.group.dev.dependencies]
-flake8-bugbear = "^23.2.13"
+flake8-bugbear = "^23.3.12"
 flake8 = "^6.0.0"
 black = "^23.1.0"
 isort = "^5.12.0"
