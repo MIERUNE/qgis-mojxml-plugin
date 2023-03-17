@@ -2,12 +2,12 @@
 
 import logging
 from pathlib import Path
-from typing import Iterable, Optional
+from typing import Iterable, List, Optional, Tuple
 
 try:
     import fiona
-except Exception:
-    fiona = None
+except ImportError:  # pragma: no cover
+    fiona = None  # pragma: no cover
 
 from ..parse import Feature
 from ..reader import iter_content_xmls
@@ -18,11 +18,10 @@ _logger = logging.getLogger(__name__)
 
 
 def _write_by_fiona(
-    features_iter: Iterable[list[Feature]],
+    features_iter: Iterable[List[Feature]],
     dst_path: Path,
     driver: Optional[str] = None,
-) -> Iterable[tuple[int, int]]:  # (num_files, num_features)
-    """WIP"""
+) -> Iterable[Tuple[int, int]]:  # (num_files, num_features)
     assert fiona, "fiona is not installed"
 
     with fiona.open(
@@ -42,12 +41,12 @@ def _write_by_fiona(
 
 
 def files_to_ogr_file(
-    src_paths: list[Path],
+    src_paths: List[Path],
     dst_path: Path,
     executor: BaseExecutor,
     driver: Optional[str] = None,
 ) -> None:
-    """WIP"""
+    """Generate OGR file from given XML/ZIP files."""
     features_iter = executor.iter_process(iter_content_xmls(src_paths))
 
     num_files = 0
@@ -65,9 +64,9 @@ def files_to_ogr_file(
 
 
 def files_to_feature_iter(
-    src_paths: list[Path], executor: BaseExecutor
+    src_paths: List[Path], executor: BaseExecutor
 ) -> Iterable[Feature]:
-    """WIP"""
+    """Iterate features from given XML/ZIP files."""
     features_iter = executor.iter_process(iter_content_xmls(src_paths))
     for features in features_iter:
         for feature in features:
