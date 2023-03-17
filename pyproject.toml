@@ -27,6 +27,7 @@ build-backend = "poetry.core.masonry.api"
 profile = "black"
 
 [tool.flake8]
+exclude = ".venv,.git,__pycache__"
 extend-ignore = "E203,E501,W503,B008"
 max-line-length = 88
 docstring-convention = "google"
