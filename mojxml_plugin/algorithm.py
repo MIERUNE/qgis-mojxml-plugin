@@ -1,5 +1,6 @@
 from pathlib import Path
 
+from PyQt5.QtCore import QVariant
 from qgis.core import QgsProcessingException  # pyright: ignore
 from qgis.core import (
     QgsCoordinateReferenceSystem,
@@ -21,6 +22,12 @@ from .mojxml.parse import ParseOptions
 from .mojxml.process import files_to_feature_iter
 from .mojxml.process.executor import ThreadPoolExecutor
 from .mojxml.schema import OGR_SCHEMA
+
+_OGR_QT_TYPE_MAP = {
+    "str": QVariant.String,
+    "int": QVariant.Int,
+    "float": QVariant.Double,
+}
 
 
 class MOJXMLProcessingAlrogithm(QgsProcessingAlgorithm):
@@ -86,8 +93,8 @@ class MOJXMLProcessingAlrogithm(QgsProcessingAlgorithm):
             )
 
         fields = QgsFields()
-        for name, type in OGR_SCHEMA["properties"].items():
-            fields.append(QgsField(name, typeName=type))
+        for name, ogr_type in OGR_SCHEMA["properties"].items():
+            fields.append(QgsField(name, type=_OGR_QT_TYPE_MAP[ogr_type]))
 
         include_chikugai = self.parameterAsBoolean(parameters, self.CHIKUGAI, context)
         include_arbitrary = self.parameterAsBoolean(parameters, self.ARBITRARY, context)
