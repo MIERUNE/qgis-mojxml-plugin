@@ -1,12 +1,12 @@
 [general]
 name=MOJXML Loader
 qgisMinimumVersion=3.0
-description=This plugin is made for Japanese users.\n This plugin helps you to translate "MOJXML (used in Japan)" into geospatial formats.\n法務省登記所備付地図データ（地図XML）の読み込みや変換を行います。
-version=0.0.1
+description=This plugin is made for Japanese users. It helps you to convert "MOJXML" (land registration polygons in Japan) into geospatial formats. 法務省登記所備付地図データ（地図XML）の読み込みや変換を行います。
+version=0.0.2
 author=MIERUNE Inc.
 email=info@mierune.co.jp
 
-about=This plugin helps you to translate "MOJXML (used in Japan)" into geospatial formats.\n法務省登記所備付地図データ（地図XML）の読み込みや変換を行います。
+about=This plugin is made for Japanese users. It helps you to convert "MOJXML" (land registration polygons in Japan) into geospatial formats. 法務省登記所備付地図データ（地図XML）の読み込みや変換を行います。
 
 tracker=https://github.com/MIERUNE/qgis-mojxml-plugin/issues
 repository=https://github.com/MIERUNE/qgis-mojxml-plugin
