@@ -7,8 +7,7 @@ readme = "README.md"
 packages = [{ include = "mojxml_plugin" }]
 
 [tool.poetry.dependencies]
-python = "^3.9"
-
+python = ">=3.8.1,<4.0"
 
 [tool.poetry.group.dev.dependencies]
 flake8-bugbear = "^23.3.12"
@@ -18,13 +17,16 @@ isort = "^5.12.0"
 pytest = "^7.2.2"
 flake8-pyproject = "^1.2.2"
 
-
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.isort]
 profile = "black"
+
+[tool.pytest.ini_options]
+# pythonpath = "src"
+addopts = ["--import-mode=importlib"]
 
 [tool.flake8]
 exclude = ".venv,.git,__pycache__"
