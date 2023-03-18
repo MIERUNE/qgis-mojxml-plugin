@@ -1,3 +1,5 @@
+"""Processing algorithm for converting MOJXML files"""
+
 from pathlib import Path
 
 from PyQt5.QtCore import QVariant
@@ -23,6 +25,7 @@ from .mojxml.process import files_to_feature_iter
 from .mojxml.process.executor import ThreadPoolExecutor
 from .mojxml.schema import OGR_SCHEMA
 
+# mapping from OGR types to Qt types
 _OGR_QT_TYPE_MAP = {
     "str": QVariant.String,
     "int": QVariant.Int,
@@ -31,10 +34,12 @@ _OGR_QT_TYPE_MAP = {
 
 
 class MOJXMLProcessingAlrogithm(QgsProcessingAlgorithm):
+    """Processing algorithm for converting MOJXML files"""
+
     INPUT = "INPUT"
     OUTPUT = "OUTPUT"
-    CHIKUGAI = "CHIKUGAI"
-    ARBITRARY = "ARBITRARY"
+    INCLUDE_CHIKUGAI = "CHIKUGAI"
+    INCLUDE_ARBITRARY = "ARBITRARY"
 
     def __init__(self):
         super().__init__()
@@ -59,13 +64,13 @@ class MOJXMLProcessingAlrogithm(QgsProcessingAlgorithm):
         )
         self.addParameter(
             QgsProcessingParameterBoolean(
-                self.ARBITRARY,
+                self.INCLUDE_ARBITRARY,
                 self.tr("任意座標系のデータを含める"),
             )
         )
         self.addParameter(
             QgsProcessingParameterBoolean(
-                self.CHIKUGAI,
+                self.INCLUDE_CHIKUGAI,
                 self.tr("地区外・別図を含める"),
             )
         )
@@ -86,19 +91,19 @@ class MOJXMLProcessingAlrogithm(QgsProcessingAlgorithm):
         return None
 
     def processAlgorithm(self, parameters, context, feedback):
+        # Prepare field definition
+        fields = QgsFields()
+        for name, ogr_type in OGR_SCHEMA["properties"].items():
+            fields.append(QgsField(name, type=_OGR_QT_TYPE_MAP[ogr_type]))
+
+        # INPUT: .zip or .xml file
         filename = self.parameterAsFile(parameters, self.INPUT, context)
         if filename is None:
             raise QgsProcessingException(
                 self.invalidSourceError(parameters, self.INPUT)
             )
 
-        fields = QgsFields()
-        for name, ogr_type in OGR_SCHEMA["properties"].items():
-            fields.append(QgsField(name, type=_OGR_QT_TYPE_MAP[ogr_type]))
-
-        include_chikugai = self.parameterAsBoolean(parameters, self.CHIKUGAI, context)
-        include_arbitrary = self.parameterAsBoolean(parameters, self.ARBITRARY, context)
-
+        # OUTPUT: feature sink
         (sink, name) = self.parameterAsSink(
             parameters,
             self.OUTPUT,
@@ -108,6 +113,15 @@ class MOJXMLProcessingAlrogithm(QgsProcessingAlgorithm):
             QgsCoordinateReferenceSystem(4326),
         )
 
+        # Some optional parameters
+        include_chikugai = self.parameterAsBoolean(
+            parameters, self.INCLUDE_CHIKUGAI, context
+        )
+        include_arbitrary = self.parameterAsBoolean(
+            parameters, self.INCLUDE_ARBITRARY, context
+        )
+
+        # Setup mojxml loader
         po = ParseOptions(
             include_arbitrary_crs=include_arbitrary,
             include_chikugai=include_chikugai,
@@ -122,10 +136,12 @@ class MOJXMLProcessingAlrogithm(QgsProcessingAlgorithm):
                 if feedback.isCanceled():
                     return {"STATUS": "CANCELLED"}
 
+                # Get the exterior ring of the polygon
                 json_geom = src_feat["geometry"]
                 json_coords = json_geom["coordinates"]
                 exterior = json_coords[0][0]
 
+                # Create a MultiPolygon feature
                 geom = QgsMultiPolygon()
                 geom.addGeometry(QgsPolygon(QgsLineString(exterior)))
                 feat = QgsFeature()
@@ -143,7 +159,6 @@ class MOJXMLProcessingAlrogithm(QgsProcessingAlgorithm):
             feedback.reportError(
                 "ファイルの読み込みに失敗しました。正常なファイルかどうか確認してください。", fatalError=True
             )
-            return
 
         feedback.pushInfo(f"{count} 個の地物を読み込みました。")
         return {"STATUS": "SUCCESS"}

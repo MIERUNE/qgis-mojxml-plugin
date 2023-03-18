@@ -3,17 +3,17 @@
 from qgis.core import QgsApplication
 from qgis.gui import QgisInterface
 
-from .provider import Provider
+from .provider import MOJXMLProcessingProvider
 
 
 class MOJXMLPlugin:
-    """QGIS plugin for loading Japanese land registration XML files"""
+    """QGIS plugin for converting Japanese land registration XML files"""
 
     def __init__(self, iface: QgisInterface):
         self.iface = iface
 
     def initGui(self):
-        self.provider = Provider()
+        self.provider = MOJXMLProcessingProvider()
         QgsApplication.processingRegistry().addProvider(self.provider)
 
     def unload(self):
