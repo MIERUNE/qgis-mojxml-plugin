@@ -15,16 +15,22 @@ A QGIS plugin for converting “MOJXML” (Japanese land registration polygons) 
 
 3. 「実行」をクリックします。巨大なファイルを読み込む場合は処理に時間がかかります。
 
-## 開発
+## Development
 
-開発環境の構築:
+Setup development environment:
 
 ```bash
 make init
 ```
 
-QGIS にデプロイ:
+Deploy to QGIS:
 
 ```bash
 make deploy
 ```
+
+## License
+
+GPL v2
+
+This plugin uses [MIERUNE/mojxml-py](https://github.com/MIERUNE/mojxml-py), which is licensed under the MIT License.

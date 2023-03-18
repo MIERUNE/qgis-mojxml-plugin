@@ -12,7 +12,6 @@ help:
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
 
 init:  ## Startup project
-	poetry config --local virtualenvs.options.system-site-packages true
 	poetry env use $(QGIS_BIN)/python3
 	poetry install
 
