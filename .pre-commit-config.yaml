@@ -10,16 +10,19 @@ repos:
       - id: check-yaml
       - id: check-added-large-files
         args: ["--maxkb=10000"]
+  - repo: https://github.com/floatingpurr/sync_with_poetry
+    rev: 0.4.0
+    hooks:
+      - id: sync_with_poetry
   - repo: https://github.com/psf/black
     rev: 23.1.0
     hooks:
       - id: black
-        language_version: python3.10
+        language_version: python3.8
   - repo: https://github.com/PyCQA/flake8
     rev: 6.0.0
     hooks:
       - id: flake8
-        entry: pflake8
         additional_dependencies:
           - flake8-bugbear
           - flake8-pyproject

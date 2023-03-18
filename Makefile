@@ -22,6 +22,9 @@ package:  ## Build zip package
 	mkdir -p dist
 	git archive -o dist/artifact-${VERSION}.zip ${VERSION} ${PACKAGE_NAME}
 
+test:  ## Test
+	pytest -v . --cov=${PACKAGE_NAME} --cov-report=html --cov-report=xml --cov-report=term
+
 update-deps:  ## Update mojxml library
 	pip download mojxml --no-dependencies
 	wheel3 unpack mojxml-*-py3-none-any.whl
