@@ -2,7 +2,7 @@
 
 [QGIS](https://qgis.org/) で法務省登記所備付地図データ（地図 XML）の読み込みや変換を行うプラグインです。
 
-A QGIS plugin for converting “MOJXML” (Japanese land registration polygons) into geospatial formats. Currently, only Japanese is supported.
+A QGIS plugin for converting Japanese “MOJ Map XML” (land registration polygons data) into geospatial formats. Currently, only Japanese language is supported.
 
 ## 使い方
 
