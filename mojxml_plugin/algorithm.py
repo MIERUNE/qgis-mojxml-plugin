@@ -7,6 +7,7 @@ from qgis.core import QgsProcessingException  # pyright: ignore
 from qgis.core import (
     QgsCoordinateReferenceSystem,
     QgsFeature,
+    QgsFeatureSink,
     QgsField,
     QgsFields,
     QgsLineString,
@@ -150,7 +151,7 @@ class MOJXMLProcessingAlrogithm(QgsProcessingAlgorithm):
                 for name, value in src_feat["properties"].items():
                     feat.setAttribute(name, value)
 
-                sink.addFeature(feat)
+                sink.addFeature(feat, QgsFeatureSink.FastInsert)
 
                 count += 1
                 if count % 100 == 0:
