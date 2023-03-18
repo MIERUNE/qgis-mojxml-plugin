@@ -29,5 +29,6 @@ update-deps:  ## Update mojxml library
 	pip download mojxml --no-dependencies
 	wheel3 unpack mojxml-*-py3-none-any.whl
 	rsync -r --delete mojxml-*/mojxml ${PACKAGE_NAME}/
+	cp mojxml-*/mojxml-*.dist-info/LICENSE.txt ${PACKAGE_NAME}/mojxml/
 	rm -rf mojxml-*/
 	rm -rf mojxml-*.whl
