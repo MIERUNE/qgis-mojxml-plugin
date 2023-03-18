@@ -38,8 +38,8 @@ class MOJXMLProcessingAlrogithm(QgsProcessingAlgorithm):
 
     INPUT = "INPUT"
     OUTPUT = "OUTPUT"
-    INCLUDE_CHIKUGAI = "CHIKUGAI"
-    INCLUDE_ARBITRARY = "ARBITRARY"
+    INCLUDE_CHIKUGAI = "INCLUDE_CHIKUGAI"
+    INCLUDE_ARBITRARY_CRS = "INCLUDE_ARBITRARY_CRS"
 
     def __init__(self):
         super().__init__()
@@ -64,7 +64,7 @@ class MOJXMLProcessingAlrogithm(QgsProcessingAlgorithm):
         )
         self.addParameter(
             QgsProcessingParameterBoolean(
-                self.INCLUDE_ARBITRARY,
+                self.INCLUDE_ARBITRARY_CRS,
                 self.tr("任意座標系のデータを含める"),
             )
         )
@@ -118,7 +118,7 @@ class MOJXMLProcessingAlrogithm(QgsProcessingAlgorithm):
             parameters, self.INCLUDE_CHIKUGAI, context
         )
         include_arbitrary = self.parameterAsBoolean(
-            parameters, self.INCLUDE_ARBITRARY, context
+            parameters, self.INCLUDE_ARBITRARY_CRS, context
         )
 
         # Setup mojxml loader
