@@ -1,5 +1,7 @@
 # qgis-mojxml-plugin
 
+[![Test](https://github.com/MIERUNE/qgis-mojxml-plugin/actions/workflows/test.yml/badge.svg)](https://github.com/MIERUNE/qgis-mojxml-plugin/actions/workflows/test.yml) [![codecov](https://codecov.io/gh/MIERUNE/qgis-mojxml-plugin/branch/main/graph/badge.svg?token=YKAY0VKZOT)](https://codecov.io/gh/MIERUNE/qgis-mojxml-plugin)
+
 [QGIS](https://qgis.org/) で [法務省登記所備付地図データ](https://front.geospatial.jp/moj-chizu-xml-download/)（地図 XML）の変換や読み込みを行うためのプラグインです。
 
 A QGIS plugin for converting Japanese “MOJ Map XML” (land registration polygons data) into geospatial formats. Currently, only Japanese language is supported.

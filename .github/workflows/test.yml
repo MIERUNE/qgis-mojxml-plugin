@@ -24,3 +24,10 @@ jobs:
           docker run --rm --volume `pwd`:/app -w=/app qgis/qgis:latest sh -c
           "pip3 install -r requirements.txt && PYTHONPATH=/app xvfb-run -s '+extension GLX -screen 0 1024x768x24'
           pytest -v --cov --cov-report=xml --cov-report=term"
+
+      - name: Upload coverage
+        uses: codecov/codecov-action@v3
+        with:
+          file: ./coverage.xml
+          flags: unittests
+          fail_ci_if_error: false
