@@ -7,7 +7,7 @@ import pytest
 from qgis.core import QgsApplication
 from qgis.gui import QgsGui
 
-from mojxml_plugin.provider import MOJXMLProcessingProvider
+from mojxml_plugin import classFactory
 
 
 @pytest.fixture(autouse=True, scope="session")
@@ -34,10 +34,10 @@ def qgis_app(tmp_path_factory) -> Iterable[QgsApplication]:
 
 
 @pytest.fixture()
-def provider(qgis_app: QgsApplication) -> Iterable[str]:
-    provider = MOJXMLProcessingProvider()
-    qgis_app.processingRegistry().addProvider(provider)
+def provider(qgis_app: QgsApplication) -> Iterable[None]:
+    plugin = classFactory(None)  # pyright: ignore
+    plugin.initGui()
 
-    yield provider.name()
+    yield None
 
-    qgis_app.processingRegistry().removeProvider(provider)
+    plugin.unload()

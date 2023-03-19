@@ -1,5 +1,6 @@
 from pathlib import Path
 
+from PyQt5.QtGui import QIcon
 from qgis.core import QgsApplication, QgsVectorLayer
 
 
@@ -7,8 +8,14 @@ def test_registered(qgis_app: QgsApplication, provider: str):
     registory = QgsApplication.processingRegistry()
     p = registory.providerById("mojxmlloader")
     assert p is not None
+    assert isinstance(p.icon(), QIcon)
+
     alg = registory.algorithmById("mojxmlloader:mojxmlloader")
     assert alg is not None
+    assert alg.group() is None
+    assert alg.groupId() is None
+    assert isinstance(alg.displayName(), str)
+    assert isinstance(alg.shortHelpString(), str)
 
 
 def test_load_xml(qgis_app: QgsApplication, provider: str):

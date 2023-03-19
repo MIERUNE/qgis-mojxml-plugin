@@ -106,7 +106,7 @@ class MOJXMLProcessingAlrogithm(QgsProcessingAlgorithm):
         if filename is None:
             raise QgsProcessingException(
                 self.invalidSourceError(parameters, self.INPUT)
-            )
+            )  # pragma: no cover
 
         # Destination layer
         (sink, dest_id) = self.parameterAsSink(
@@ -118,7 +118,9 @@ class MOJXMLProcessingAlrogithm(QgsProcessingAlgorithm):
             QgsCoordinateReferenceSystem.fromEpsgId(4326),
         )
         if sink is None:
-            raise QgsProcessingException(self.invalidSinkError(parameters, self.OUTPUT))
+            raise QgsProcessingException(
+                self.invalidSinkError(parameters, self.OUTPUT)
+            )  # pragma: no cover
 
         # Some optional parameters
         include_chikugai = self.parameterAsBoolean(
