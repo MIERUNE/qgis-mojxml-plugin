@@ -1,17 +1,23 @@
 # qgis-mojxml-plugin
 
-[QGIS](https://qgis.org/) で法務省登記所備付地図データ（地図 XML）の読み込みや変換を行うプラグインです。
+[QGIS](https://qgis.org/) で [法務省登記所備付地図データ](https://front.geospatial.jp/moj-chizu-xml-download/)（地図 XML）の変換や読み込みを行うためのプラグインです。
 
 A QGIS plugin for converting Japanese “MOJ Map XML” (land registration polygons data) into geospatial formats. Currently, only Japanese language is supported.
 
+[札幌市中央区のデータ](https://www.geospatial.jp/ckan/dataset/houmusyouchizu-2022-1-1)（取得日: 2023-03-15）を読み込んで、大字や丁目にもとづいて塗り分けた例：
+
+![札幌市中央区のデータを読み込んだ例](./docs/images/example_output.jpg)
+
 ## 使い方
+
+プラグインは [QGIS Python Plugin Repository](https://plugins.qgis.org/plugins/mojxml_plugin/) で公開されています。QGIS の「プラグインの管理とインストール」からインストールできます。
 
 1. QGIS のプロセッシングツールボックスを開いて、「法務省登記所備付地図データ」→「地図 XML/ZIP を読み込む」を選択します。
 2. 「地図 XML/ZIP を読み込む」のダイアログが表示されます。
 
    1. 「地図 XML/ZIP ファイル」で、読み込みたいファイル（.zip または .xml）を指定します。
-   2. （任意）必要に応じて「任意座標系のデータを含める」「地区外・別図を含める」をチェックします。
-   3. （任意）「出力ファイル」で出力先やファイル形式を選択します（未設定の場合は一時レイヤに作成されます）。
+   2. （任意）必要であれば「任意座標系のデータを含める」「地区外・別図を含める」をチェックします。
+   3. （任意）「出力ファイル」で出力先やファイル形式を選択します（未指定の場合は一時レイヤに作成されます）。
 
 3. 「実行」をクリックします。巨大なファイルを読み込む場合は処理に時間がかかります。
 
