@@ -4,13 +4,13 @@
 
 A QGIS plugin for converting Japanese “MOJ Map XML” (land registration polygons data) into geospatial formats. Currently, only Japanese language is supported.
 
-[札幌市中央区のデータ](https://www.geospatial.jp/ckan/dataset/houmusyouchizu-2022-1-1)（取得日: 2023-03-15）を読み込んで、大字や丁目にもとづいて塗り分けた例：
+[札幌市中央区のデータ](https://www.geospatial.jp/ckan/dataset/houmusyouchizu-2022-1-1)（取得日: 2023-03-15）を読み込んで、大字や丁目ごとに塗り分けた例：
 
 ![札幌市中央区のデータを読み込んだ例](./docs/images/example_output.jpg)
 
 ## 使い方
 
-プラグインは [QGIS Python Plugin Repository](https://plugins.qgis.org/plugins/mojxml_plugin/) で公開されています。QGIS の「プラグインの管理とインストール」からインストールできます。
+本プラグインは [QGIS Python Plugin Repository](https://plugins.qgis.org/plugins/mojxml_plugin/) で公開されています。QGIS の「プラグインの管理とインストール」から検索してインストールできます。
 
 1. QGIS のプロセッシングツールボックスを開いて、「法務省登記所備付地図データ」→「地図 XML/ZIP を読み込む」を選択します。
 2. 「地図 XML/ZIP を読み込む」のダイアログが表示されます。
@@ -39,4 +39,4 @@ make deploy
 
 GPL v2
 
-This plugin uses [MIERUNE/mojxml-py](https://github.com/MIERUNE/mojxml-py), which is licensed under the MIT License.
+This plugin contains [MIERUNE/mojxml-py](https://github.com/MIERUNE/mojxml-py), which is licensed under the MIT License.

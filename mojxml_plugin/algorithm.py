@@ -2,7 +2,7 @@
 
 from pathlib import Path
 
-from PyQt5.QtCore import QVariant
+from PyQt5.QtCore import QCoreApplication, QVariant
 from qgis.core import QgsProcessingException  # pyright: ignore
 from qgis.core import (
     QgsCoordinateReferenceSystem,
@@ -42,24 +42,21 @@ class MOJXMLProcessingAlrogithm(QgsProcessingAlgorithm):
     INCLUDE_CHIKUGAI = "INCLUDE_CHIKUGAI"
     INCLUDE_ARBITRARY_CRS = "INCLUDE_ARBITRARY_CRS"
 
-    def __init__(self):
-        super().__init__()
-
-    def tr(self, string):
-        return string
+    def tr(self, string: str):
+        return QCoreApplication.translate("Processing", string)
 
     def initAlgorithm(self, config=None):
         self.addParameter(
             QgsProcessingParameterFile(
                 self.INPUT,
                 self.tr("地図XML/ZIPファイル"),
-                fileFilter="地図XML (*.xml *.zip)",
+                fileFilter=self.tr("地図XML (*.xml *.zip)"),
             )
         )
         self.addParameter(
             QgsProcessingParameterFeatureSink(
                 self.OUTPUT,
-                self.tr("出力ファイル"),
+                self.tr("出力レイヤ"),
                 QgsProcessing.TypeVectorPolygon,
             )
         )
@@ -67,12 +64,14 @@ class MOJXMLProcessingAlrogithm(QgsProcessingAlgorithm):
             QgsProcessingParameterBoolean(
                 self.INCLUDE_ARBITRARY_CRS,
                 self.tr("任意座標系のデータを含める"),
+                defaultValue=False,
             )
         )
         self.addParameter(
             QgsProcessingParameterBoolean(
                 self.INCLUDE_CHIKUGAI,
                 self.tr("地区外・別図を含める"),
+                defaultValue=False,
             )
         )
 
@@ -82,14 +81,19 @@ class MOJXMLProcessingAlrogithm(QgsProcessingAlgorithm):
     def name(self):
         return "mojxmlloader"
 
-    def displayName(self):
-        return self.tr("地図XML/ZIPを読み込む")
-
     def group(self):
         return None
 
     def groupId(self):
         return None
+
+    def displayName(self):
+        return self.tr("地図XML/ZIPを読み込む")
+
+    def shortHelpString(self) -> str:
+        return self.tr(
+            "法務省登記所備付地図データ（地図XML）をベクタレイヤに変換します。配布されているZIPファイルをそのまま読み込むこともできます。"
+        )
 
     def processAlgorithm(self, parameters, context, feedback):
         # Prepare field definition
@@ -97,22 +101,24 @@ class MOJXMLProcessingAlrogithm(QgsProcessingAlgorithm):
         for name, ogr_type in OGR_SCHEMA["properties"].items():
             fields.append(QgsField(name, type=_OGR_QT_TYPE_MAP[ogr_type]))
 
-        # INPUT: .zip or .xml file
+        # Input .zip or .xml file
         filename = self.parameterAsFile(parameters, self.INPUT, context)
         if filename is None:
             raise QgsProcessingException(
                 self.invalidSourceError(parameters, self.INPUT)
             )
 
-        # OUTPUT: feature sink
-        (sink, name) = self.parameterAsSink(
+        # Destination layer
+        (sink, dest_id) = self.parameterAsSink(
             parameters,
             self.OUTPUT,
             context,
             fields,
             QgsWkbTypes.MultiPolygon,
-            QgsCoordinateReferenceSystem(4326),
+            QgsCoordinateReferenceSystem.fromEpsgId(4326),
         )
+        if sink is None:
+            raise QgsProcessingException(self.invalidSinkError(parameters, self.OUTPUT))
 
         # Some optional parameters
         include_chikugai = self.parameterAsBoolean(
@@ -135,7 +141,7 @@ class MOJXMLProcessingAlrogithm(QgsProcessingAlgorithm):
                 [Path(filename) for filename in [filename]], executor
             ):
                 if feedback.isCanceled():
-                    return {"STATUS": "CANCELLED"}
+                    return {}
 
                 # Get the exterior ring of the polygon
                 json_geom = src_feat["geometry"]
@@ -162,4 +168,6 @@ class MOJXMLProcessingAlrogithm(QgsProcessingAlgorithm):
             )
 
         feedback.pushInfo(f"{count} 個の地物を読み込みました。")
-        return {"STATUS": "SUCCESS"}
+        return {
+            self.OUTPUT: dest_id,
+        }
