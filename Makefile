@@ -6,6 +6,9 @@ VERSION = HEAD
 # macOS
 QGIS_BIN = /Applications/QGIS.app/Contents/MacOS/bin
 QGIS_USER = ~/Library/Application\ Support/QGIS/QGIS3/profiles/default
+export QGIS_PREFIX_PATH = /Applications/QGIS.app/Contents/MacOS
+export DYLD_LIBRARY_PATH = /Applications/QGIS.app/Contents/MacOS/lib
+export PROJ_LIB = /Applications/QGIS.app/Contents/Resources/proj
 
 
 help:
@@ -23,7 +26,7 @@ package:  ## Build zip package
 	git archive -o dist/artifact-${VERSION}.zip ${VERSION} ${PACKAGE_NAME}
 
 test:  ## Test
-	pytest -v . --cov=${PACKAGE_NAME} --cov-report=html --cov-report=xml --cov-report=term
+	pytest -v --cov --cov-report=term
 
 update-deps:  ## Update mojxml library
 	pip download mojxml --no-dependencies

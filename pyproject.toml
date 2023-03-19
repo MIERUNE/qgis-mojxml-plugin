@@ -16,6 +16,8 @@ black = "^23.1.0"
 isort = "^5.12.0"
 pytest = "^7.2.2"
 flake8-pyproject = "^1.2.2"
+pytest-cov = "^4.0.0"
+shapely = "<2.0"
 
 [build-system]
 requires = ["poetry-core"]
@@ -33,3 +35,8 @@ exclude = ".venv,.git,__pycache__"
 extend-ignore = "E203,E501,W503,B008"
 max-line-length = 88
 docstring-convention = "google"
+
+[tool.coverage.run]
+source = ['mojxml_plugin']
+omit = ['mojxml_plugin/mojxml/*']
+concurrency = ["thread"]
