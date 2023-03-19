@@ -1,0 +1,26 @@
+name: Test
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  Test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Pull QGIS
+        run: docker pull qgis/qgis:latest
+
+      - name: Export requirements.txt
+        run: |
+          pip3 install poetry
+          poetry export --with dev -f requirements.txt -o requirements.txt
+
+      - name: Run tests
+        run: >
+          docker run --rm --volume `pwd`:/app -w=/app qgis/qgis:latest sh -c
+          "pip3 install -r requirements.txt && PYTHONPATH=/app xvfb-run -s '+extension GLX -screen 0 1024x768x24'
+          pytest -v --cov --cov-report=xml --cov-report=term"
