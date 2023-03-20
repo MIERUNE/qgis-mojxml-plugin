@@ -12,7 +12,7 @@ A QGIS plugin for converting Japanese “MOJ Map XML” (land registration polyg
 
 ## 使い方
 
-本プラグインは [QGIS Python Plugin Repository](https://plugins.qgis.org/plugins/mojxml_plugin/) で公開されているため、QGIS の「プラグインの管理とインストール」から検索してインストールできます。
+本プラグインは [QGIS Python Plugin Repository](https://plugins.qgis.org/plugins/mojxml_plugin/) で公開されており、QGIS の「プラグインの管理とインストール」から検索してインストールできます。
 
 使い方：
 
@@ -37,6 +37,12 @@ Deploy to QGIS:
 
 ```bash
 make deploy
+```
+
+Run test:
+
+```bash
+make test
 ```
 
 ## License
