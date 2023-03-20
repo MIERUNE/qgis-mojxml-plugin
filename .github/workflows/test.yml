@@ -8,11 +8,17 @@ on:
 jobs:
   Test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        qgis_image_tag: [release-3_22, release-3_28]
+    env:
+      OS: ubuntu
+      QGIS_IMAGE_TAG: ${{ matrix.qgis_image_tag }}
     steps:
       - uses: actions/checkout@v3
 
       - name: Pull QGIS
-        run: docker pull qgis/qgis:latest
+        run: docker pull qgis/qgis:${{ matrix.qgis_image_tag }}
 
       - name: Export requirements.txt
         run: |
@@ -30,4 +36,5 @@ jobs:
         with:
           file: ./coverage.xml
           flags: unittests
+          env_vars: OS,QGIS_IMAGE_TAG
           fail_ci_if_error: false
