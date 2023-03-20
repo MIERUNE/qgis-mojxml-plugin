@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        qgis_image_tag: [release-3_22, release-3_28]
+        qgis_image_tag: [latest]
     env:
       OS: ubuntu
       QGIS_IMAGE_TAG: ${{ matrix.qgis_image_tag }}
@@ -18,7 +18,7 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Pull QGIS
-        run: docker pull qgis/qgis:${{ matrix.qgis_image_tag }}
+        run: docker pull ghcr.io/ciscorn/qgis:${{ matrix.qgis_image_tag }}
 
       - name: Export requirements.txt
         run: |
@@ -27,7 +27,7 @@ jobs:
 
       - name: Run tests
         run: >
-          docker run --rm --volume `pwd`:/app -w=/app qgis/qgis:latest sh -c
+          docker run --rm --volume `pwd`:/app -w=/app ghcr.io/ciscorn/qgis:${{ matrix.qgis_image_tag }} sh -c
           "pip3 install -r requirements.txt && pip3 install 'shapely<2.0' && PYTHONPATH=/app xvfb-run -s '+extension GLX -screen 0 1024x768x24'
           pytest -v --cov --cov-report=xml --cov-report=term"
 
