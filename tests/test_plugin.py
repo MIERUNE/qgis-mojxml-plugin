@@ -6,9 +6,10 @@ from qgis.core import QgsApplication, QgsVectorLayer
 
 def test_registered(qgis_app: QgsApplication, provider: str):
     registory = QgsApplication.processingRegistry()
-    p = registory.providerById("mojxmlloader")
-    assert p is not None
-    assert isinstance(p.icon(), QIcon)
+    provider = registory.providerById("mojxmlloader")
+    assert provider is not None
+    assert len(provider.name()) > 0
+    assert isinstance(provider.icon(), QIcon)
 
     alg = registory.algorithmById("mojxmlloader:mojxmlloader")
     assert alg is not None
@@ -19,7 +20,7 @@ def test_registered(qgis_app: QgsApplication, provider: str):
 
 
 def test_load_xml(qgis_app: QgsApplication, provider: str):
-    import processing  # pyright: ignore
+    import processing
 
     result = processing.run(
         "mojxmlloader:mojxmlloader",
@@ -33,7 +34,7 @@ def test_load_xml(qgis_app: QgsApplication, provider: str):
 
 
 def test_load_xml_to_file(qgis_app: QgsApplication, provider: str, tmp_path: Path):
-    import processing  # pyright: ignore
+    import processing
 
     output_path = str(tmp_path / "test.gpkg")
     result = processing.run(
@@ -57,8 +58,8 @@ def test_load_zip(qgis_app: QgsApplication, provider: str):
             "OUTPUT": "memory:",
         },
     )
-    v: QgsVectorLayer = result["OUTPUT"]
-    assert v.featureCount() == 453
+    layer: QgsVectorLayer = result["OUTPUT"]
+    assert layer.featureCount() == 453
 
     result = processing.run(
         "mojxmlloader:mojxmlloader",
@@ -68,8 +69,8 @@ def test_load_zip(qgis_app: QgsApplication, provider: str):
             "OUTPUT": "memory:",
         },
     )
-    v: QgsVectorLayer = result["OUTPUT"]
-    assert v.featureCount() == 446
+    layer: QgsVectorLayer = result["OUTPUT"]
+    assert layer.featureCount() == 446
 
     result = processing.run(
         "mojxmlloader:mojxmlloader",
@@ -80,5 +81,5 @@ def test_load_zip(qgis_app: QgsApplication, provider: str):
             "OUTPUT": "memory:",
         },
     )
-    v: QgsVectorLayer = result["OUTPUT"]
-    assert v.featureCount() == 27237
+    layer: QgsVectorLayer = result["OUTPUT"]
+    assert layer.featureCount() == 27237
