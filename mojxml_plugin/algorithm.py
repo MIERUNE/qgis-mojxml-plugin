@@ -145,14 +145,17 @@ class MOJXMLProcessingAlrogithm(QgsProcessingAlgorithm):
                 if feedback.isCanceled():
                     return {}
 
-                # Get the exterior ring of the polygon
+                # Get the exterior ring and interior rings of the polygon
                 json_geom = src_feat["geometry"]
                 json_coords = json_geom["coordinates"]
-                exterior = json_coords[0][0]
 
                 # Create a MultiPolygon feature
                 geom = QgsMultiPolygon()
-                geom.addGeometry(QgsPolygon(QgsLineString(exterior)))
+                exterior = json_coords[0][0]
+                polygon = QgsPolygon(QgsLineString(exterior))
+                for interior in json_coords[0][1:]:
+                    polygon.addInteriorRing(QgsLineString(interior))
+                geom.addGeometry(polygon)
                 feat = QgsFeature()
                 feat.setGeometry(geom)
                 feat.setFields(fields, initAttributes=True)

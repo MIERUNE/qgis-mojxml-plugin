@@ -24,7 +24,7 @@ class ParseOptions:
 
 
 class Feature(TypedDict):
-    """GeoJSON Feature"""
+    """GeoJSON-like feature representation"""
 
     type: str
     geometry: Dict[str, list]
@@ -95,7 +95,6 @@ def _parse_curves(
 
         curve_id = curve.attrib["id"]
         assert x is not None and y is not None
-        assert curve_id not in curves
 
         curves[curve_id] = (x, y)
 
@@ -107,23 +106,32 @@ def _parse_surfaces(
 ) -> Dict[str, Surface]:
     surfaces: Dict[str, Surface] = {}
     for surface in spatial_elem.iterfind("./zmn:GM_Surface", _NS):
-        assert surface.find(".//zmn:GM_SurfaceBoundary.exterior", _NS) is not None
         polygons = surface.findall("./zmn:GM_Surface.patch/zmn:GM_Polygon", _NS)
         assert len(polygons) == 1
         polygon = polygons[0]
-
         surface_id = surface.attrib["id"]
-        surface_curves: list[tuple[float, float]] = []
-        for cc in polygon.iterfind(".//zmn:GM_CompositeCurve.generator", _NS):
+        rings: list[list[tuple[float, float]]] = []
+
+        exterior = polygon.find(".//zmn:GM_SurfaceBoundary.exterior", _NS)
+        ring: list[tuple[float, float]] = []
+        for cc in exterior.find(".//zmn:GM_Ring", _NS):
             curve_id = cc.attrib["idref"]
             assert curve_id in curves
-            assert surface_id not in surface_curves
-            surface_curves.append(curves[curve_id])
+            ring.append(curves[curve_id])
+        ring.append(ring[0])
+        rings.append(ring)
+
+        for interior in polygon.iterfind(".//zmn:GM_SurfaceBoundary.interior", _NS):
+            ring: list[tuple[float, float]] = []
+            for cc in interior.find(".//zmn:GM_Ring", _NS):
+                curve_id = cc.attrib["idref"]
+                assert curve_id in curves
+                ring.append(curves[curve_id])
+            ring.append(ring[0])
+            rings.append(ring)
 
         assert surface_id not in surfaces
-        assert len(surface_curves) > 0, surface_id
-        surface_curves.append(surface_curves[0])
-        surfaces[surface_id] = [[surface_curves]]
+        surfaces[surface_id] = [rings]
 
     return surfaces
 
@@ -189,10 +197,8 @@ def parse_raw(content: bytes, options: ParseOptions) -> List[Feature]:
     """Parse raw XML content and get a list of features."""
     doc = et.fromstring(content, None)
 
-    # 基本情報を取得
-    base_props = _parse_base_properties(doc)
+    # このファイルの座標参照系を取得する
     source_crs = CRS_MAP[doc.find("./座標系", _NS).text]
-
     if (not options.include_arbitrary_crs) and source_crs is None:
         return []
 
@@ -200,7 +206,7 @@ def parse_raw(content: bytes, options: ParseOptions) -> List[Feature]:
     points = _parse_points(spatial_elem)
     curves = _parse_curves(spatial_elem, points)
 
-    # 平面直交座標系を WGS84 に変換する
+    # 平面直角座標系を WGS84 に変換する
     if source_crs is not None:
         transformer = pyproj.Transformer.from_crs(
             source_crs, "epsg:4326", always_xy=True
@@ -245,6 +251,7 @@ def parse_raw(content: bytes, options: ParseOptions) -> List[Feature]:
     )
 
     # XMLのルート要素にある属性情報をFeatureのプロパティに追加する
+    base_props = _parse_base_properties(doc)
     for feature in features:
         feature["properties"].update(base_props)
 
