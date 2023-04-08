@@ -45,8 +45,5 @@ jobs:
       - name: black
         run: poetry run black --check --diff .
 
-      # - name: isort
-      #   run: poetry run isort --check --diff .
-
-      - name: flake8
-        run: poetry run flake8 .
+      - name: ruff
+        run: poetry run ruff --format github .
