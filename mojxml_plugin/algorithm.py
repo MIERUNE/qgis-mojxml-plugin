@@ -19,7 +19,6 @@
 from pathlib import Path
 
 from PyQt5.QtCore import QCoreApplication, QVariant
-from qgis.core import QgsProcessingException  # pyright: ignore
 from qgis.core import (
     QgsCoordinateReferenceSystem,
     QgsFeature,
@@ -31,6 +30,7 @@ from qgis.core import (
     QgsPolygon,
     QgsProcessing,
     QgsProcessingAlgorithm,
+    QgsProcessingException,  # pyright: ignore
     QgsProcessingParameterBoolean,
     QgsProcessingParameterFeatureSink,
     QgsProcessingParameterFile,

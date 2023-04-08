@@ -25,7 +25,7 @@ def qgis_app(tmp_path_factory) -> Iterable[QgsApplication]:
     sys.path.append(str(path))
     from importlib import import_module
 
-    Processing = import_module("processing.core.Processing")
+    Processing = import_module("processing.core.Processing")  # noqa: N806
     Processing.Processing.initialize()
 
     yield app

@@ -29,6 +29,8 @@ addopts = ["--import-mode=importlib"]
 
 [tool.ruff]
 select = ["F", "E", "W", "B", "C90", "N", "I"]
+ignore = ["N802", "E501"]
+target-version = "py38"
 
 [tool.coverage.run]
 source = ['mojxml_plugin']
