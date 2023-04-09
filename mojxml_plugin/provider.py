@@ -21,12 +21,13 @@ from pathlib import Path
 from PyQt5.QtGui import QIcon
 from qgis.core import QgsProcessingProvider
 
-from .algorithm import MOJXMLProcessingAlrogithm
+from .algorithm import MOJXMLProcessingAlrogithm, MOJXMLProcessingAlrogithmDirectory
 
 
 class MOJXMLProcessingProvider(QgsProcessingProvider):
     def loadAlgorithms(self, *args, **kwargs):
         self.addAlgorithm(MOJXMLProcessingAlrogithm())
+        self.addAlgorithm(MOJXMLProcessingAlrogithmDirectory())
 
     def id(self, *args, **kwargs):
         return "mojxmlloader"
