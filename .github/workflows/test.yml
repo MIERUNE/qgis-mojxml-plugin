@@ -29,7 +29,6 @@ jobs:
         run: >
           docker run --rm --volume `pwd`:/app -w=/app qgis/qgis:${{ matrix.qgis_image_tag }} sh -c "
             pip3 install -r requirements.txt &&
-            pip3 install 'shapely<2.0' &&
             PYTHONPATH=/app xvfb-run -s '+extension GLX -screen 0 1024x768x24' pytest -v --cov --cov-report=xml --cov-report=term
           "
 
