@@ -1,4 +1,4 @@
-"""Run conversion in parallel."""
+"""Run conversion process in parallel."""
 
 import concurrent.futures
 import os
@@ -11,7 +11,7 @@ from ..parse import Feature, ParseOptions, parse_raw
 class BaseExecutor(metaclass=ABCMeta):
     """Executor for processing files"""
 
-    def __init__(self, options: ParseOptions):
+    def __init__(self, options: ParseOptions) -> None:
         """Initialize"""
         self.options = options
 
@@ -28,7 +28,7 @@ class WorkerPoolExecutor(BaseExecutor, metaclass=ABCMeta):
 
     @abstractmethod
     def _get_executor(self, max_workers: int) -> concurrent.futures.Executor:
-        ...
+        """Get executor."""
 
     def iter_process(
         self,
@@ -58,7 +58,7 @@ class WorkerPoolExecutor(BaseExecutor, metaclass=ABCMeta):
 
 
 class ProcessPoolExecutor(WorkerPoolExecutor):
-    """Process paralelly with ProcessPoolExecutor"""
+    """Process in parallel with ProcessPoolExecutor"""
 
     def _get_executor(self, max_workers: int) -> concurrent.futures.Executor:
         max_workers = os.cpu_count() or 1
@@ -66,7 +66,7 @@ class ProcessPoolExecutor(WorkerPoolExecutor):
 
 
 class ThreadPoolExecutor(WorkerPoolExecutor):
-    """Process paralelly with ThreadPoolExecutor"""
+    """Process in parallel with ThreadPoolExecutor"""
 
     def _get_executor(self, max_workers: int) -> concurrent.futures.Executor:
         max_workers = (os.cpu_count() or 1) * 2

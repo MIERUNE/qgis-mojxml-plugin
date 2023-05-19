@@ -23,7 +23,7 @@ from .provider import MOJXMLProcessingProvider
 
 
 class MOJXMLPlugin:
-    """QGIS plugin for converting Japanese land registration XML files"""
+    """QGIS plugin for loading MOJ MAP XML (Japanese land registration polygons)"""
 
     def __init__(self, iface: QgisInterface):
         self.iface = iface

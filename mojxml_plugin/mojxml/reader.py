@@ -22,7 +22,7 @@ def iter_content_xmls(src_paths: List[Path]) -> Iterable[bytes]:
 class MojXMLZipFile(ZipFile):
     """法務省登記所備付地図データの多段zip圧縮されたアーカイブを扱う"""
 
-    def iter_xml_contents(self):
+    def iter_xml_contents(self) -> Iterable[bytes]:
         """Iterate XML contents from given zips"""
         for name in self.namelist():
             if name.endswith(".zip"):

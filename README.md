@@ -4,7 +4,7 @@
 
 [QGIS](https://qgis.org/) で [法務省登記所備付地図データ](https://front.geospatial.jp/moj-chizu-xml-download/)（地図 XML）の変換や読み込みを行うためのプラグインです。
 
-A QGIS plugin for converting Japanese “MOJ Map XML” (land registration polygons data) into geospatial formats. Currently, only Japanese language is supported.
+A QGIS plugin for converting Japanese “MOJ Map XML” (land registration polygon data) into geospatial formats. Currently, only Japanese language is supported.
 
 [札幌市中央区のデータ](https://www.geospatial.jp/ckan/dataset/houmusyouchizu-2022-1-1)（取得日: 2023-03-15）を読み込んで、大字コードや丁目コードで塗り分けた例：
 
