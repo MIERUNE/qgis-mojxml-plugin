@@ -13,8 +13,8 @@ python = ">=3.8.1,<4.0"
 black = "^23.7.0"
 pytest = "^7.4.0"
 pytest-cov = "^4.1.0"
-pyqt5-stubs = { version = "^5.15.6.0", platform = "win32" }
-ruff = "^0.0.282"
+pyqt5-stubs = "^5.15.6.0"
+ruff = "^0.0.285"
 
 [build-system]
 requires = ["poetry-core"]
