@@ -185,7 +185,8 @@ class MOJXMLProcessingAlrogithm(QgsProcessingAlgorithm):
                     feedback.pushInfo(f"{count} 個の地物を読み込みました。")
         except ValueError:
             feedback.reportError(
-                "ファイルの読み込みに失敗しました。正常なファイルかどうか確認してください。", fatalError=True
+                "ファイルの読み込みに失敗しました。正常なファイルかどうか確認してください。",
+                fatalError=True,
             )
 
         feedback.pushInfo(f"{count} 個の地物を読み込みました。")
