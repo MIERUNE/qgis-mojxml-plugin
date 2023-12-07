@@ -2,7 +2,10 @@
 name = "qgis-mojxml-plugin"
 version = "0.0.0"
 description = "A QGIS plugin for converting Japanese “MOJ Map XML” (land registration polygons in Japan) into geospatial formats."
-authors = ["MIERUNE Inc. <info@mierune.co.jp>"]
+authors = [
+    "MIERUNE Inc. <info@mierune.co.jp>",
+    "Taku Fukada <naninunenor@gmail.com>",
+]
 readme = "README.md"
 packages = [{ include = "mojxml_plugin" }]
 
