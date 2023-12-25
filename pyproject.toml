@@ -13,10 +13,10 @@ packages = [{ include = "mojxml_plugin" }]
 python = ">=3.8.1,<4.0"
 
 [tool.poetry.group.dev.dependencies]
-pytest = "^7.4.3"
-pytest-cov = "^4.1.0"
-pyqt5-stubs = "^5.15.6.0"
-ruff = "^0.1.7"
+pytest = "^7.4"
+pytest-cov = "^4.1"
+pyqt5-stubs = "^5.15.6"
+ruff = "^0.1"
 
 [build-system]
 requires = ["poetry-core"]
