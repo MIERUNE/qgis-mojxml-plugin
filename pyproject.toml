@@ -14,7 +14,7 @@ python = ">=3.8.1,<4.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.1"
-pytest-cov = "^4.1"
+pytest-cov = "^5.0"
 pyqt5-stubs = "^5.15.6"
 ruff = "^0.3"
 
