@@ -50,3 +50,9 @@ make test
 GPL v2
 
 This plugin contains [MIERUNE/mojxml-py](https://github.com/MIERUNE/mojxml-py), which is licensed under the MIT License.
+
+## Authors
+
+- MIERUNE Inc.
+- Taku Fukada ([@ciscorn](https://github.com/ciscorn) - original author
+
