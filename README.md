@@ -53,6 +53,6 @@ This plugin contains [MIERUNE/mojxml-py](https://github.com/MIERUNE/mojxml-py), 
 
 ## Authors
 
-- MIERUNE Inc.
-- Taku Fukada ([@ciscorn](https://github.com/ciscorn) - original author
+- Taku Fukada ([@ciscorn](https://github.com/ciscorn)) - Original Author
+- And all contributors
 
