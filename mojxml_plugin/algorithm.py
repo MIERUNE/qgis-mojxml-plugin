@@ -18,7 +18,6 @@
 
 from pathlib import Path
 
-from PyQt5.QtCore import QCoreApplication, QVariant
 from qgis.core import (
     QgsCoordinateReferenceSystem,
     QgsFeature,
@@ -36,6 +35,7 @@ from qgis.core import (
     QgsProcessingParameterFile,
     QgsWkbTypes,
 )
+from qgis.PyQt.QtCore import QCoreApplication, QVariant
 
 from .mojxml.parse import ParseOptions
 from .mojxml.process import files_to_feature_iter
