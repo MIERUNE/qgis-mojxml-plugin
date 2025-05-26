@@ -2,11 +2,11 @@
 
 [![Test](https://github.com/MIERUNE/qgis-mojxml-plugin/actions/workflows/test.yml/badge.svg)](https://github.com/MIERUNE/qgis-mojxml-plugin/actions/workflows/test.yml) [![codecov](https://codecov.io/gh/MIERUNE/qgis-mojxml-plugin/branch/main/graph/badge.svg?token=YKAY0VKZOT)](https://codecov.io/gh/MIERUNE/qgis-mojxml-plugin)
 
-[QGIS](https://qgis.org/) で [法務省登記所備付地図データ](https://front.geospatial.jp/moj-chizu-xml-download/)（地図 XML）の変換や読み込みを行うためのプラグインです。
+[QGIS](https://qgis.org/) で [法務省登記所備付地図データ](https://front.geospatial.jp/moj-chizu-xml-readme/moj-chizu-xml-download/)（地図 XML）の変換や読み込みを行うためのプラグインです。
 
 A QGIS plugin for converting Japanese “MOJ Map XML” (land registration polygon data) into geospatial formats. Currently, only Japanese language is supported.
 
-[札幌市中央区のデータ](https://www.geospatial.jp/ckan/dataset/houmusyouchizu-2022-1-1)（取得日: 2023-03-15）を読み込んで、大字コードや丁目コードで塗り分けた例：
+[札幌市中央区のデータ](https://www.geospatial.jp/ckan/dataset/houmusyouchizu-2023-1-1/resource/d1d0d9e6-7e61-4d0d-a3d0-ea8bd3f81fcb)（取得日: 2023-03-15）を読み込んで、大字コードや丁目コードで塗り分けた例：
 
 ![札幌市中央区のデータを読み込んだ例](./docs/images/example_output.jpg)
 
