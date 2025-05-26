@@ -18,8 +18,8 @@
 
 from pathlib import Path
 
-from qgis.PyQt.QtGui import QIcon
 from qgis.core import QgsProcessingProvider
+from qgis.PyQt.QtGui import QIcon
 
 from .algorithm import MOJXMLProcessingAlrogithm
 

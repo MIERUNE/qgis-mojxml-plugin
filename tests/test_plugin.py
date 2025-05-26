@@ -1,7 +1,7 @@
 from pathlib import Path
 
-from qgis.PyQt.QtGui import QIcon
 from qgis.core import QgsApplication, QgsVectorLayer
+from qgis.PyQt.QtGui import QIcon
 
 
 def test_registered(qgis_app: QgsApplication, provider: str):
