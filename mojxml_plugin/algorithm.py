@@ -155,9 +155,12 @@ class MOJXMLProcessingAlrogithm(QgsProcessingAlgorithm):
         count = 0
         feedback.pushInfo("地物を読み込んでいます...")
         try:
-            for src_feat in files_to_feature_iter(
-                [Path(filename) for filename in [filename]], executor
-            ):
+            feature_iterable = files_to_feature_iter([Path(filename) for filename in [filename]], executor)
+            feature_length = len(list(feature_iterable))
+  
+            feedback.setProgress(0)
+
+            for src_feat in files_to_feature_iter([Path(filename) for filename in [filename]], executor):
                 if feedback.isCanceled():
                     return {}
 
@@ -179,8 +182,10 @@ class MOJXMLProcessingAlrogithm(QgsProcessingAlgorithm):
                     feat.setAttribute(name, value)
 
                 sink.addFeature(feat, QgsFeatureSink.FastInsert)
-
                 count += 1
+
+                progress = int(count / feature_length * 100)
+                feedback.setProgress(progress)
                 if count % 100 == 0:
                     feedback.pushInfo(f"{count} 個の地物を読み込みました。")
         except ValueError:
@@ -190,6 +195,7 @@ class MOJXMLProcessingAlrogithm(QgsProcessingAlgorithm):
             )
 
         feedback.pushInfo(f"{count} 個の地物を読み込みました。")
+        feedback.setProgress(100)
         return {
             self.OUTPUT: dest_id,
         }
