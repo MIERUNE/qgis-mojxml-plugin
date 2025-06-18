@@ -155,12 +155,16 @@ class MOJXMLProcessingAlrogithm(QgsProcessingAlgorithm):
         count = 0
         feedback.pushInfo("地物を読み込んでいます...")
         try:
-            feature_iterable = files_to_feature_iter([Path(filename) for filename in [filename]], executor)
+            feature_iterable = files_to_feature_iter(
+                [Path(filename) for filename in [filename]], executor
+            )
             feature_length = len(list(feature_iterable))
-  
+
             feedback.setProgress(0)
 
-            for src_feat in files_to_feature_iter([Path(filename) for filename in [filename]], executor):
+            for src_feat in files_to_feature_iter(
+                [Path(filename) for filename in [filename]], executor
+            ):
                 if feedback.isCanceled():
                     return {}
 
