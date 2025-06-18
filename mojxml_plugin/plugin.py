@@ -53,9 +53,7 @@ class MOJXMLPlugin:
 
         tool_button = QToolButton()
         icon = self.provider.icon()
-        default_action = QAction(
-            icon, "法務省登記所備付地図データを読み込む", self.iface.mainWindow()
-        )
+        default_action = QAction(icon, "MOJXML Loader", self.iface.mainWindow())
         default_action.triggered.connect(
             lambda: execAlgorithmDialog("mojxmlloader:mojxmlloader", {})
         )
