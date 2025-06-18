@@ -18,8 +18,11 @@
 
 from qgis.core import QgsApplication
 from qgis.gui import QgisInterface
+from qgis.PyQt.QtWidgets import QAction, QToolButton
 
 from .provider import MOJXMLProcessingProvider
+
+from processing import execAlgorithmDialog
 
 
 class MOJXMLPlugin:
@@ -31,6 +34,31 @@ class MOJXMLPlugin:
     def initGui(self):
         self.provider = MOJXMLProcessingProvider()
         QgsApplication.processingRegistry().addProvider(self.provider)
+        self.setup_algorithms_tool_button()
 
     def unload(self):
-        QgsApplication.processingRegistry().removeProvider(self.provider)
+        if hasattr(self, "toolButtonAction"):
+            self.teardown_algorithms_tool_button()
+
+        if hasattr(self, "provider"):
+            QgsApplication.processingRegistry().removeProvider(self.provider)
+            del self.provider
+
+    def setup_algorithms_tool_button(self):
+        if hasattr(self, "toolButtonAction"):
+            return  # すでに追加済みなら何もしない
+
+        tool_button = QToolButton()
+        icon = self.provider.icon()
+        default_action = QAction(icon, "Quick DEM for JP", self.iface.mainWindow())
+        default_action.triggered.connect(
+            lambda: execAlgorithmDialog("mojxmlloader:mojxmlloader", {})
+        )
+        tool_button.setDefaultAction(default_action)
+
+        self.toolButtonAction = self.iface.addToolBarWidget(tool_button)
+
+    def teardown_algorithms_tool_button(self):
+        if hasattr(self, "toolButtonAction"):
+            self.iface.removeToolBarIcon(self.toolButtonAction)
+            del self.toolButtonAction
