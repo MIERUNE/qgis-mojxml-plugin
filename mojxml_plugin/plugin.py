@@ -16,12 +16,16 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-from processing import execAlgorithmDialog
+import contextlib
+
 from qgis.core import QgsApplication
 from qgis.gui import QgisInterface
 from qgis.PyQt.QtWidgets import QAction, QToolButton
 
 from .provider import MOJXMLProcessingProvider
+
+with contextlib.suppress(ImportError):
+    from processing import execAlgorithmDialog
 
 
 class MOJXMLPlugin:
