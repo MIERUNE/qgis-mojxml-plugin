@@ -48,8 +48,8 @@ class MOJXMLPlugin:
             del self.provider
 
     def setup_algorithms_tool_button(self):
-        if hasattr(self, "toolButtonAction"):
-            return  # すでに追加済みなら何もしない
+        if hasattr(self, "toolButtonAction") and self.toolButtonAction:
+            return
 
         tool_button = QToolButton()
         icon = self.provider.icon()
