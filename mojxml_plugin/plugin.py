@@ -16,13 +16,12 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
+from processing import execAlgorithmDialog
 from qgis.core import QgsApplication
 from qgis.gui import QgisInterface
 from qgis.PyQt.QtWidgets import QAction, QToolButton
 
 from .provider import MOJXMLProcessingProvider
-
-from processing import execAlgorithmDialog
 
 
 class MOJXMLPlugin:
@@ -50,7 +49,9 @@ class MOJXMLPlugin:
 
         tool_button = QToolButton()
         icon = self.provider.icon()
-        default_action = QAction(icon, "Quick DEM for JP", self.iface.mainWindow())
+        default_action = QAction(
+            icon, "法務省登記所備付地図データを読み込む", self.iface.mainWindow()
+        )
         default_action.triggered.connect(
             lambda: execAlgorithmDialog("mojxmlloader:mojxmlloader", {})
         )
