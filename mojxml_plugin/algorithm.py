@@ -184,7 +184,7 @@ class MOJXMLProcessingAlrogithm(QgsProcessingAlgorithm):
                 sink.addFeature(feat, QgsFeatureSink.FastInsert)
                 count += 1
 
-                progress = int(count / feature_length * 100)
+                progress = int(count / feature_length * 99)
                 feedback.setProgress(progress)
                 if count % 100 == 0:
                     feedback.pushInfo(f"{count} 個の地物を読み込みました。")
