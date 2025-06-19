@@ -38,9 +38,18 @@ class MOJXMLPlugin:
         self.provider = MOJXMLProcessingProvider()
         QgsApplication.processingRegistry().addProvider(self.provider)
 
-        if not self.iface:
-            return
+        if self.iface:
+            self.setup_algorithms_tool_button()
 
+    def unload(self):
+        if hasattr(self, "toolButtonAction"):
+            self.teardown_algorithms_tool_button()
+
+        if hasattr(self, "provider"):
+            QgsApplication.processingRegistry().removeProvider(self.provider)
+            del self.provider
+
+    def setup_algorithms_tool_button(self):
         if hasattr(self, "toolButtonAction") and self.toolButtonAction:
             return
 
@@ -54,11 +63,7 @@ class MOJXMLPlugin:
 
         self.toolButtonAction = self.iface.addToolBarWidget(tool_button)
 
-    def unload(self):
+    def teardown_algorithms_tool_button(self):
         if hasattr(self, "toolButtonAction"):
             self.iface.removeToolBarIcon(self.toolButtonAction)
             del self.toolButtonAction
-
-        if hasattr(self, "provider"):
-            QgsApplication.processingRegistry().removeProvider(self.provider)
-            del self.provider
