@@ -40,7 +40,7 @@ class MOJXMLPlugin:
 
         if not self.iface:
             return
-        
+
         if hasattr(self, "toolButtonAction") and self.toolButtonAction:
             return
 
@@ -53,7 +53,6 @@ class MOJXMLPlugin:
         tool_button.setDefaultAction(default_action)
 
         self.toolButtonAction = self.iface.addToolBarWidget(tool_button)
-
 
     def unload(self):
         if hasattr(self, "toolButtonAction"):
