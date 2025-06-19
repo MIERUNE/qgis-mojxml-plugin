@@ -37,7 +37,9 @@ class MOJXMLPlugin:
     def initGui(self):
         self.provider = MOJXMLProcessingProvider()
         QgsApplication.processingRegistry().addProvider(self.provider)
-        self.setup_algorithms_tool_button()
+
+        if self.iface:
+            self.setup_algorithms_tool_button()
 
     def unload(self):
         if hasattr(self, "toolButtonAction"):
