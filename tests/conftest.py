@@ -37,8 +37,6 @@ def qgis_app(tmp_path_factory) -> Iterable[QgsApplication]:
 def provider(qgis_app: QgsApplication) -> Iterable[None]:
     plugin = classFactory(None)  # pyright: ignore
     plugin.initGui()
-    plugin.setup_algorithms_tool_button()
-    plugin.teardown_algorithms_tool_button()
 
     yield None
 
