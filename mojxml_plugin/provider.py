@@ -29,7 +29,7 @@ class MOJXMLProcessingProvider(QgsProcessingProvider):
         self.addAlgorithm(MOJXMLProcessingAlrogithm())
 
     def id(self, *args, **kwargs):
-        return "mierune"
+        return "mojxmlloader"
 
     def name(self, *args, **kwargs):
         return self.tr("法務省登記所備付地図データ")

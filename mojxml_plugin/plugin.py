@@ -57,7 +57,7 @@ class MOJXMLPlugin:
         icon = self.provider.icon()
         default_action = QAction(icon, "MOJXML Loader", self.iface.mainWindow())
         default_action.triggered.connect(
-            lambda: execAlgorithmDialog("mierune:mojxmlloader", {})
+            lambda: execAlgorithmDialog("mojxmlloader:mojxmlloader", {})
         )
         tool_button.setDefaultAction(default_action)
 
