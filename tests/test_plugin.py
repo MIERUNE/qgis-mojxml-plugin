@@ -6,12 +6,12 @@ from qgis.PyQt.QtGui import QIcon
 
 def test_registered(qgis_app: QgsApplication, provider: str):
     registory = QgsApplication.processingRegistry()
-    provider = registory.providerById("mierune")
+    provider = registory.providerById("")
     assert provider is not None
     assert len(provider.name()) > 0
     assert isinstance(provider.icon(), QIcon)
 
-    alg = registory.algorithmById("mierune:mojxmlloader")
+    alg = registory.algorithmById("mojxmlloader:mojxmlloader")
     assert alg is not None
     assert alg.group() is None
     assert alg.groupId() is None
@@ -23,7 +23,7 @@ def test_load_xml(qgis_app: QgsApplication, provider: str):
     import processing
 
     result = processing.run(
-        "mierune:mojxmlloader",
+        "mojxmlloader:mojxmlloader",
         {
             "INPUT": "testdata/15222-1107-1553.xml",
             "OUTPUT": "memory:",
@@ -38,7 +38,7 @@ def test_load_xml_to_file(qgis_app: QgsApplication, provider: str, tmp_path: Pat
 
     output_path = str(tmp_path / "test.gpkg")
     result = processing.run(
-        "mierune:mojxmlloader",
+        "mojxmlloader:mojxmlloader",
         {
             "INPUT": "testdata/15222-1107-1553.xml",
             "OUTPUT": output_path,
@@ -51,7 +51,7 @@ def test_load_zip(qgis_app: QgsApplication, provider: str):
     import processing  # pyright: ignore
 
     result = processing.run(
-        "mierune:mojxmlloader",
+        "mojxmlloader:mojxmlloader",
         {
             "INPUT": "testdata/14103-0200.zip",
             "INCLUDE_CHIKUGAI": True,
@@ -62,7 +62,7 @@ def test_load_zip(qgis_app: QgsApplication, provider: str):
     assert layer.featureCount() == 453
 
     result = processing.run(
-        "mierune:mojxmlloader",
+        "mojxmlloader:mojxmlloader",
         {
             "INPUT": "testdata/14103-0200.zip",
             "INCLUDE_CHIKUGAI": False,
@@ -73,7 +73,7 @@ def test_load_zip(qgis_app: QgsApplication, provider: str):
     assert layer.featureCount() == 446
 
     result = processing.run(
-        "mierune:mojxmlloader",
+        "mojxmlloader:mojxmlloader",
         {
             "INPUT": "testdata/14103-0200.zip",
             "INCLUDE_ARBITRARY_CRS": True,
