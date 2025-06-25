@@ -16,10 +16,16 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
+import contextlib
+
 from qgis.core import QgsApplication
 from qgis.gui import QgisInterface
+from qgis.PyQt.QtWidgets import QAction, QToolButton
 
 from .provider import MOJXMLProcessingProvider
+
+with contextlib.suppress(ImportError):
+    from processing import execAlgorithmDialog
 
 
 class MOJXMLPlugin:
@@ -32,5 +38,32 @@ class MOJXMLPlugin:
         self.provider = MOJXMLProcessingProvider()
         QgsApplication.processingRegistry().addProvider(self.provider)
 
+        if self.iface:
+            self.setup_algorithms_tool_button()
+
     def unload(self):
-        QgsApplication.processingRegistry().removeProvider(self.provider)
+        if hasattr(self, "toolButtonAction"):
+            self.teardown_algorithms_tool_button()
+
+        if hasattr(self, "provider"):
+            QgsApplication.processingRegistry().removeProvider(self.provider)
+            del self.provider
+
+    def setup_algorithms_tool_button(self):
+        if hasattr(self, "toolButtonAction") and self.toolButtonAction:
+            return
+
+        tool_button = QToolButton()
+        icon = self.provider.icon()
+        default_action = QAction(icon, "MOJXML Loader", self.iface.mainWindow())
+        default_action.triggered.connect(
+            lambda: execAlgorithmDialog("mojxmlloader:mojxmlloader", {})
+        )
+        tool_button.setDefaultAction(default_action)
+
+        self.toolButtonAction = self.iface.addToolBarWidget(tool_button)
+
+    def teardown_algorithms_tool_button(self):
+        if hasattr(self, "toolButtonAction"):
+            self.iface.removeToolBarIcon(self.toolButtonAction)
+            del self.toolButtonAction

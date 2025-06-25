@@ -179,8 +179,8 @@ class MOJXMLProcessingAlrogithm(QgsProcessingAlgorithm):
                     feat.setAttribute(name, value)
 
                 sink.addFeature(feat, QgsFeatureSink.FastInsert)
-
                 count += 1
+
                 if count % 100 == 0:
                     feedback.pushInfo(f"{count} 個の地物を読み込みました。")
         except ValueError:
@@ -190,6 +190,7 @@ class MOJXMLProcessingAlrogithm(QgsProcessingAlgorithm):
             )
 
         feedback.pushInfo(f"{count} 個の地物を読み込みました。")
+
         return {
             self.OUTPUT: dest_id,
         }
